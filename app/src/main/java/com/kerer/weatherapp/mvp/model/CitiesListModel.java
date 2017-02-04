@@ -1,5 +1,6 @@
 package com.kerer.weatherapp.mvp.model;
 
+import android.location.Address;
 import android.location.Geocoder;
 import android.util.Log;
 
@@ -9,6 +10,7 @@ import com.kerer.weatherapp.entity.CurrentlyWeather;
 import com.kerer.weatherapp.entity.DayWeather;
 import com.kerer.weatherapp.entity.Weather;
 
+import java.io.IOException;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -32,10 +34,13 @@ public class CitiesListModel {
         this.mGeocoder = geocoder;
     }
 
-    public Observable<Weather> loadCity() {
+    public Observable<Weather> loadCity(String city) throws IOException {
 
-        return mDarkSkyApi.getCityInfo("48.292079,25.935837")
-                .map(this::getWeatherFromResponse)
+            Address address = mGeocoder.getFromLocationName(city, 1).get(0);
+            String cityName = address.getLatitude() + "," + address.getLongitude();
+
+        return mDarkSkyApi.getCityInfo(cityName)
+                .map(t ->getWeatherFromResponse(t, city))
                 .doOnNext(this::cachToDb)
                 .doOnError(throwable -> Log.d("TAG_ERROR", throwable.getMessage()))
                 .onErrorResumeNext(getSavedInfo())
@@ -47,9 +52,9 @@ public class CitiesListModel {
      * @param dto http request response. Need to be converted at correct model
      * @return
      */
-    private Weather getWeatherFromResponse(WeatherResponseDTO dto) {
+    private Weather getWeatherFromResponse(WeatherResponseDTO dto, String city) {
         CurrentlyWeather currentlyWeather = new CurrentlyWeather(dto.getCurrentlyDTO().getTemperature(),
-                dto.getCurrentlyDTO().getSummary(), dto.getCurrentlyDTO().getPrecipType(), "Default");
+                dto.getCurrentlyDTO().getSummary(), dto.getCurrentlyDTO().getPrecipType(), city);
 
 
         List<DayWeather> daysWeather = Observable.from(dto.getDailyDTO().getData())
@@ -58,7 +63,7 @@ public class CitiesListModel {
                 .toBlocking()
                 .first();
 
-        return new Weather(currentlyWeather, daysWeather, "Default");
+        return new Weather(currentlyWeather, daysWeather, city);
     }
 
     /**
