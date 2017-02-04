@@ -16,12 +16,12 @@ import com.kerer.weatherapp.entity.Weather;
 import com.kerer.weatherapp.mvp.presenter.CitiesListPresenter;
 import com.kerer.weatherapp.mvp.view.CitiesListView;
 
+
 /**
  * Created by ivan on 04.02.17.
  */
 
 public class CitiesListFragment extends MvpAppCompatFragment implements CitiesListView {
-
     @InjectPresenter
     CitiesListPresenter mPresenter;
 
@@ -60,12 +60,22 @@ public class CitiesListFragment extends MvpAppCompatFragment implements CitiesLi
 
     @Override
     public void updateWeather(Weather weather) {
+
+
+       // weather.save();
+
         Log.d("TAGGGGG", new Gson().toJson(weather));
+       // Log.d("TAGGGGG", String.valueOf(Weather.findById(Weather.class, 1).getmCurrentlyWeather().getmTemperature()));
     }
 
 
     private void toast(String text){
         Toast.makeText(getActivity(), text, Toast.LENGTH_SHORT)
                 .show();
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
     }
 }

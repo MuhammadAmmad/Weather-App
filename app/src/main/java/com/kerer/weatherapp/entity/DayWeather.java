@@ -1,15 +1,17 @@
 package com.kerer.weatherapp.entity;
 
-import java.io.Serializable;
 
 /**
  * Created by ivan on 04.02.17.
  */
 
-public class DayWeather implements Serializable{
+public class DayWeather{
     private Double minTemperature;
     private Double maxTemperature;
     private Integer time;
+
+    public DayWeather() {
+    }
 
     public DayWeather(Double minTemperature, Double maxTemperature, Integer time) {
         this.minTemperature = minTemperature;

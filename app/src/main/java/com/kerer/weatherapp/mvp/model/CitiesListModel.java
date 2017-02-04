@@ -32,7 +32,8 @@ public class CitiesListModel {
         return mDarkSkyApi.getCityInfo("48.292079,25.935837")
                 .map(this::getWeatherFromResponse)
                 .doOnError(throwable -> {
-                    Log.d("TAFFFF", "ERRORRRR!!!");
+                    Log.d("TAFFFF", throwable.getMessage());
+                    throwable.printStackTrace();
                 })
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
@@ -42,12 +43,12 @@ public class CitiesListModel {
         CurrentlyWeather currentlyWeather = new CurrentlyWeather(dto.getCurrentlyDTO().getTemperature(),
                 dto.getCurrentlyDTO().getSummary(), dto.getCurrentlyDTO().getPrecipType());
 
+
         List<DayWeather> daysWeather = Observable.from(dto.getDailyDTO().getData())
                 .map(datumDTO -> new DayWeather(datumDTO.getTemperatureMin(), datumDTO.getTemperatureMax(), datumDTO.getTime()))
                 .toList()
                 .toBlocking()
                 .first();
-
         return new Weather(currentlyWeather, daysWeather);
     }
 }

@@ -1,5 +1,6 @@
 package com.kerer.weatherapp.entity;
 
+
 /**
  * Created by ivan on 04.02.17.
  */
@@ -8,6 +9,9 @@ public class CurrentlyWeather {
     private double mTemperature;
     private String mDescription;
     private String mSkyState;
+
+    public CurrentlyWeather() {
+    }
 
     public CurrentlyWeather(double mTemperature, String mDescription, String mSkyState) {
         this.mTemperature = mTemperature;
