@@ -1,22 +1,26 @@
 package com.kerer.weatherapp.entity;
 
 
+import com.orm.SugarRecord;
+
 /**
  * Created by ivan on 04.02.17.
  */
 
-public class CurrentlyWeather {
+public class CurrentlyWeather extends SugarRecord{
     private double mTemperature;
     private String mDescription;
     private String mSkyState;
+    private String mCity;
 
     public CurrentlyWeather() {
     }
 
-    public CurrentlyWeather(double mTemperature, String mDescription, String mSkyState) {
+    public CurrentlyWeather(double mTemperature, String mDescription, String mSkyState, String mCity) {
         this.mTemperature = mTemperature;
         this.mDescription = mDescription;
         this.mSkyState = mSkyState;
+        this.mCity = mCity;
     }
 
     public double getmTemperature() {
@@ -30,4 +34,6 @@ public class CurrentlyWeather {
     public String getmSkyState() {
         return mSkyState;
     }
+
+
 }

@@ -65,7 +65,7 @@ public class CitiesListFragment extends MvpAppCompatFragment implements CitiesLi
        // weather.save();
 
         Log.d("TAGGGGG", new Gson().toJson(weather));
-       // Log.d("TAGGGGG", String.valueOf(Weather.findById(Weather.class, 1).getmCurrentlyWeather().getmTemperature()));
+      //  Log.d("TAGGGGG", String.valueOf(Weather.find(Weather.class, "mCity", "Chernivtsi").get(0).getmCurrentlyWeather().getmTemperature()));
     }
 
 

@@ -1,11 +1,13 @@
 package com.kerer.weatherapp.entity;
 
 
+import com.orm.SugarRecord;
+
 /**
  * Created by ivan on 04.02.17.
  */
 
-public class DayWeather{
+public class DayWeather extends SugarRecord {
     private Double minTemperature;
     private Double maxTemperature;
     private Integer time;

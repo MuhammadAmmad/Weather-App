@@ -1,5 +1,7 @@
 package com.kerer.weatherapp.di.module;
 
+import android.location.Geocoder;
+
 import com.kerer.weatherapp.api.DarkSkyApi;
 import com.kerer.weatherapp.mvp.model.CitiesListModel;
 
@@ -15,7 +17,7 @@ import dagger.Provides;
 public class ModelsModule {
     @Provides
     @Singleton
-    CitiesListModel provideCitiesListModel(DarkSkyApi darkSkyApi){
-        return new CitiesListModel(darkSkyApi);
+    CitiesListModel provideCitiesListModel(DarkSkyApi darkSkyApi, Geocoder geocoder){
+        return new CitiesListModel(darkSkyApi, geocoder);
     }
 }

@@ -4,6 +4,7 @@ import com.kerer.weatherapp.api.DarkSkyApi;
 import com.kerer.weatherapp.di.module.ApiModule;
 import com.kerer.weatherapp.di.module.ContextModule;
 import com.kerer.weatherapp.di.module.RetrofitModule;
+import com.kerer.weatherapp.di.module.UtilsModule;
 import com.kerer.weatherapp.mvp.presenter.CitiesListPresenter;
 
 import javax.inject.Singleton;
@@ -15,7 +16,7 @@ import dagger.Component;
  */
 
 @Singleton
-@Component(modules = {ApiModule.class, RetrofitModule.class, ContextModule.class})
+@Component(modules = {ApiModule.class, RetrofitModule.class, ContextModule.class, UtilsModule.class})
 public interface AppComponent {
     DarkSkyApi getYahooApi();
     void injectCitiesListPresenter(CitiesListPresenter presenter);

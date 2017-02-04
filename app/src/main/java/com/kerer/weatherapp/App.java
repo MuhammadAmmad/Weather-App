@@ -5,6 +5,7 @@ import android.app.Application;
 import com.kerer.weatherapp.di.AppComponent;
 import com.kerer.weatherapp.di.DaggerAppComponent;
 import com.kerer.weatherapp.di.module.ContextModule;
+import com.orm.SugarContext;
 
 
 /**
@@ -21,7 +22,7 @@ public class App extends Application {
                 .contextModule(new ContextModule(this))
                 .build();
 
-        //SugarContext.init(this);
+        SugarContext.init(this);
     }
 
     public static AppComponent getAppComponent(){
@@ -31,6 +32,6 @@ public class App extends Application {
     @Override
     public void onTerminate() {
         super.onTerminate();
-       // SugarContext.terminate();
+        SugarContext.terminate();
     }
 }
