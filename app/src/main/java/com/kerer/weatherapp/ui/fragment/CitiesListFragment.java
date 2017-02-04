@@ -12,14 +12,9 @@ import com.arellomobile.mvp.MvpAppCompatFragment;
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.google.gson.Gson;
 import com.kerer.weatherapp.R;
-import com.kerer.weatherapp.api.dto.DatumDTO;
-import com.kerer.weatherapp.entity.DayWeather;
 import com.kerer.weatherapp.entity.Weather;
 import com.kerer.weatherapp.mvp.presenter.CitiesListPresenter;
 import com.kerer.weatherapp.mvp.view.CitiesListView;
-
-import java.util.Date;
-import java.util.List;
 
 /**
  * Created by ivan on 04.02.17.
@@ -41,17 +36,6 @@ public class CitiesListFragment extends MvpAppCompatFragment implements CitiesLi
         mPresenter.loadData();
 
         return v;
-    }
-
-
-    @Override
-    public void showCitiesList(List<DayWeather> cities) {
-
-    }
-
-    @Override
-    public void addToCityToList(DatumDTO datumDTO) {
-        Log.d("TAGG list Item", String.valueOf(new Date(datumDTO.getTime())));
     }
 
     @Override

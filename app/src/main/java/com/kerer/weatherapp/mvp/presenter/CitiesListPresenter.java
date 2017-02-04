@@ -12,7 +12,7 @@ import javax.inject.Inject;
  */
 
 @InjectViewState
-public class CitiesListPresenter extends  BasePresenter<CitiesListView>{
+public class CitiesListPresenter extends BasePresenter<CitiesListView> {
     private static final String TAG = "CitiesListPresenter";
 
     @Inject
@@ -22,16 +22,26 @@ public class CitiesListPresenter extends  BasePresenter<CitiesListView>{
         App.getAppComponent().injectCitiesListPresenter(this);
     }
 
-    public void loadData(){
+    /**
+     * Loading data from model can bee from Internet or from DB (if internet is not aviable)
+     */
+    public void loadData() {
 
         mModel.loadCity()
-                .subscribe(weather -> getViewState().updateWeather(weather), Throwable::printStackTrace);
+                .subscribe(weather -> {
+                            getViewState().hideProgress();
+                            getViewState().updateWeather(weather);
+                        }
+                        , error -> getViewState().showError());
     }
 
-    public void onAddButtonClick(){
-        //TODO dialog
+
+    /**
+     * method save city in SQL Lite DB, delete previous data;
+     * @param city city name to change in DB
+     */
+    public void saveNewCity(String city){
+
     }
-
-
 
 }

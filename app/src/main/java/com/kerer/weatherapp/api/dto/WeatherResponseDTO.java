@@ -18,10 +18,10 @@ public class WeatherResponseDTO {
     @SerializedName("offset")
     @Expose
     private Integer offset;
-    @SerializedName("currentlyDTO")
+    @SerializedName("currently")
     @Expose
     private CurrentlyDTO currentlyDTO;
-    @SerializedName("dailyDTO")
+    @SerializedName("daily")
     @Expose
     private DailyDTO dailyDTO;
 
