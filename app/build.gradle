@@ -41,7 +41,7 @@ dependencies {
 
     compile 'io.reactivex:rxandroid:1.2.1'
     compile 'com.jakewharton.rxbinding:rxbinding-appcompat-v7:1.0.0'
-    compile 'io.reactivex:rxjava:1.2.3'
+    compile 'io.reactivex:rxjava:1.0.14'
 
     compile 'com.squareup.retrofit2:adapter-rxjava:2.0.2'
     compile 'com.squareup.retrofit2:retrofit:2.1.0'
@@ -49,4 +49,7 @@ dependencies {
     compile 'com.google.code.gson:gson:2.8.0'
     compile 'com.android.support:design:25.1.0'
 
+    compile 'com.arello-mobile:moxy:1.4.5'
+    compile 'com.arello-mobile:moxy-app-compat:1.4.5'
+    provided 'com.arello-mobile:moxy-compiler:1.4.5'
 }
