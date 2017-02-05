@@ -1,4 +1,4 @@
-package com.kerer.weatherapp;
+package com.kerer.weatherapp.service;
 
 import android.app.AlarmManager;
 import android.app.IntentService;
@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.os.SystemClock;
 import android.util.Log;
 
+import com.kerer.weatherapp.App;
 import com.kerer.weatherapp.mvp.presenter.WeatherServicePresenter;
 import com.kerer.weatherapp.mvp.view.WeatherServiceView;
 import com.kerer.weatherapp.ui.CitiesListActivity;

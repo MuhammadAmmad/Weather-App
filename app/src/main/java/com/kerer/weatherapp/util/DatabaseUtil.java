@@ -1,4 +1,4 @@
-package com.kerer.weatherapp;
+package com.kerer.weatherapp.util;
 
 import com.kerer.weatherapp.entity.City;
 import com.kerer.weatherapp.entity.CurrentlyWeather;
@@ -45,7 +45,7 @@ public class DatabaseUtil {
 
     /**
      * check is some city saved
-     * @return saved city name or null (if no cities saved yet)
+     * @return saved city name or null ()
      */
     public String getSavedCity(){
         List<City> savedCity = City
@@ -56,11 +56,26 @@ public class DatabaseUtil {
         return savedCity.get(0).getmCityName();
     }
 
+  /*  public String getSavedCity(){
+        //// TODO: 05.02.17 times
+        try {
+            List<City> savedCity = City
+                    .findWithQuery(City.class, "Select * from CITY");
+            return savedCity.get(0).getmCityName();
+        } catch (SQLiteException e){
+            return null;
+        }*/
+       /* if (savedCity.isEmpty()){
+            return null;
+        }*/
+
+
     /**
      * getting saved into Db info, while no internet connection
      * @return Observable with Weather
      */
     public Observable<Weather> getSavedInfo() {
+
         return Observable
                 .from(Weather.listAll(Weather.class))
                 .doOnNext(weather -> {
