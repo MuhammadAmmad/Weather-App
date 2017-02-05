@@ -4,14 +4,15 @@ import com.arellomobile.mvp.MvpView;
 import com.kerer.weatherapp.entity.Weather;
 
 /**
- * Created by ivan on 04.02.17.
+ *
  */
 
 
 public interface CitiesListView extends MvpView{
     void showProgress();
     void hideProgress();
-    void showEmptyList();
+    void showNoDataSavedYet();
     void showError();
+    void showNoInternet();
     void updateWeather(Weather weather);
 }

@@ -10,17 +10,16 @@ import java.util.List;
  */
 public class Weather extends SugarRecord{
 
-    private String mCity;
     private CurrentlyWeather mCurrentlyWeather;
     private List<DayWeather> mWeatherByDays;
+    private String mCity;
 
     public Weather() {
     }
 
-    public Weather(CurrentlyWeather mCurrentlyWeather, List<DayWeather> mWeatherByDays, String mCity) {
+    public Weather(CurrentlyWeather mCurrentlyWeather, List<DayWeather> mWeatherByDays) {
         this.mCurrentlyWeather = mCurrentlyWeather;
         this.mWeatherByDays = mWeatherByDays;
-        this.mCity = mCity;
     }
 
     public CurrentlyWeather getmCurrentlyWeather() {
@@ -39,15 +38,15 @@ public class Weather extends SugarRecord{
         this.mWeatherByDays = mWeatherByDays;
     }
 
+    public void setmWeatherByDays(List<DayWeather> mWeatherByDays) {
+        this.mWeatherByDays = mWeatherByDays;
+    }
+
     public String getmCity() {
         return mCity;
     }
 
     public void setmCity(String mCity) {
         this.mCity = mCity;
-    }
-
-    public void setmWeatherByDays(List<DayWeather> mWeatherByDays) {
-        this.mWeatherByDays = mWeatherByDays;
     }
 }

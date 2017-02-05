@@ -11,16 +11,14 @@ public class CurrentlyWeather extends SugarRecord{
     private double mTemperature;
     private String mDescription;
     private String mSkyState;
-    private String mCity;
 
     public CurrentlyWeather() {
     }
 
-    public CurrentlyWeather(double mTemperature, String mDescription, String mSkyState, String mCity) {
+    public CurrentlyWeather(double mTemperature, String mDescription, String mSkyState) {
         this.mTemperature = mTemperature;
         this.mDescription = mDescription;
         this.mSkyState = mSkyState;
-        this.mCity = mCity;
     }
 
     public double getmTemperature() {

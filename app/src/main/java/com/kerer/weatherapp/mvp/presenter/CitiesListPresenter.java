@@ -20,28 +20,37 @@ public class CitiesListPresenter extends BasePresenter<CitiesListView> {
 
     public CitiesListPresenter() {
         App.getAppComponent().injectCitiesListPresenter(this);
+        updateData();
     }
 
     /**
      * Loading data from model can bee from Internet or from DB (if internet is not aviable)
      */
-    public void loadData() {
+    public void loadData(String cityName) {
 
-        mModel.loadCity()
+        mModel.loadCity(cityName)
                 .subscribe(weather -> {
                             getViewState().hideProgress();
                             getViewState().updateWeather(weather);
                         }
-                        , error -> getViewState().showError());
+                        , throwable -> {getViewState().showError(); throwable.printStackTrace();});
     }
 
-
     /**
-     * method save city in SQL Lite DB, delete previous data;
-     * @param city city name to change in DB
+     * updating data by current city
      */
-    public void saveNewCity(String city){
+    private void updateData() {
+        if (!mModel.isSomeCitySaved()){
+            getViewState().showNoDataSavedYet();
+            return;
+        }
 
+        mModel.updateWeather()
+                .subscribe(weather -> {
+                            getViewState().hideProgress();
+                            getViewState().updateWeather(weather);
+                        }
+                        , throwable -> getViewState().showError());
     }
 
 }

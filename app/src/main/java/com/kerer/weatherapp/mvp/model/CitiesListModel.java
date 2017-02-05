@@ -4,6 +4,7 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.util.Log;
 
+import com.kerer.weatherapp.DatabaseUtil;
 import com.kerer.weatherapp.api.DarkSkyApi;
 import com.kerer.weatherapp.api.dto.WeatherResponseDTO;
 import com.kerer.weatherapp.entity.CurrentlyWeather;
@@ -27,35 +28,57 @@ public class CitiesListModel {
 
     private DarkSkyApi mDarkSkyApi;
     private Geocoder mGeocoder;
+    private DatabaseUtil mDatabaseUtil;
 
     @Inject
-    public CitiesListModel(DarkSkyApi darkSkyApi, Geocoder geocoder) {
+    public CitiesListModel(DarkSkyApi darkSkyApi, Geocoder geocoder, DatabaseUtil databaseUtil) {
         this.mDarkSkyApi = darkSkyApi;
         this.mGeocoder = geocoder;
+        this.mDatabaseUtil = databaseUtil;
     }
 
-    public Observable<Weather> loadCity(String city) throws IOException {
+    /**
+     * Loading weater information -> save to database;
+     * if no internet connection - load from database;
+     *
+     * @param city city for loading weather;
+     * @return Observable with Weather object for working with it in presenter
+     * @throws IOException
+     */
+    public Observable<Weather> loadCity(String city) {
+        Log.d("CitiesListPresenter model", "loadCity");
 
-            Address address = mGeocoder.getFromLocationName(city, 1).get(0);
-            String cityName = address.getLatitude() + "," + address.getLongitude();
-
-        return mDarkSkyApi.getCityInfo(cityName)
-                .map(t ->getWeatherFromResponse(t, city))
-                .doOnNext(this::cachToDb)
+        return mDarkSkyApi.getCityInfo(getFromAddress(city))
+                .map(this::getWeatherFromResponse)
+                .doOnNext(weather -> {
+                    mDatabaseUtil.saveCity(city);
+                    mDatabaseUtil.cachToDb(weather);
+                })
                 .doOnError(throwable -> Log.d("TAG_ERROR", throwable.getMessage()))
-                .onErrorResumeNext(getSavedInfo())
+                .onErrorResumeNext(throwable -> mDatabaseUtil.getSavedInfo())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    /**
+     * call when user need update weather for saved city
+     * @return Observable with Weather object for working with it in presenter
+     */
+    public Observable<Weather> updateWeather(){
+        return loadCity(mDatabaseUtil.getSavedCity());
+    }
+
+    public boolean isSomeCitySaved(){
+        return mDatabaseUtil.getSavedCity() != null;
     }
 
     /**
      * @param dto http request response. Need to be converted at correct model
      * @return
      */
-    private Weather getWeatherFromResponse(WeatherResponseDTO dto, String city) {
+    private Weather getWeatherFromResponse(WeatherResponseDTO dto) {
         CurrentlyWeather currentlyWeather = new CurrentlyWeather(dto.getCurrentlyDTO().getTemperature(),
-                dto.getCurrentlyDTO().getSummary(), dto.getCurrentlyDTO().getPrecipType(), city);
-
+                dto.getCurrentlyDTO().getSummary(), dto.getCurrentlyDTO().getPrecipType());
 
         List<DayWeather> daysWeather = Observable.from(dto.getDailyDTO().getData())
                 .map(datumDTO -> new DayWeather(datumDTO.getTemperatureMin(), datumDTO.getTemperatureMax(), datumDTO.getTime()))
@@ -63,41 +86,29 @@ public class CitiesListModel {
                 .toBlocking()
                 .first();
 
-        return new Weather(currentlyWeather, daysWeather, city);
+        return new Weather(currentlyWeather, daysWeather);
     }
 
+
     /**
-     * deleting all records from database.
-     * saving new record
+     * Method for casting address to coordinates
      *
-     * @param weather new record to save
+     * @param address city name what input user
+     * @return coordinates like 23.2323,22.323233
      */
-    private void cachToDb(Weather weather) {
-        //delete all data from DB
-        Weather.deleteAll(Weather.class);
-        DayWeather.deleteAll(DayWeather.class);
-        CurrentlyWeather.deleteAll(CurrentlyWeather.class);
+    private String getFromAddress(String address) {
+        Log.d("TAGGS", address);
+        Log.d("TAGGS", String.valueOf(mGeocoder.isPresent()));
 
-        //insert new record
-        weather.save();
-        weather.getmCurrentlyWeather().save();
-        for (DayWeather item : weather.getmWeatherByDays()) {
-            item.save();
+        try {
+            List<Address> addresses = mGeocoder.getFromLocationName(address, 1);
+            Log.d("TAGGS", addresses.get(0).getAddressLine(0));
+            if (!addresses.isEmpty()) {
+                return addresses.get(0).getLatitude() + "," + addresses.get(0).getLongitude();
+            }
+        } catch (IOException ignored) {
         }
-    }
+        return "1,1";
 
-    /**
-     * getting saved into Db info, while no internet connection
-     * @return Observable with Weather
-     */
-    private Observable<Weather> getSavedInfo() {
-        Log.d("ASFASF", "asfasfasf");
-
-        return Observable
-                .from(Weather.listAll(Weather.class))
-                .doOnNext(weather -> {
-                    weather.setmCurrentlyWeather(CurrentlyWeather.findWithQuery(CurrentlyWeather.class, "Select * from CURRENTLY_WEATHER").get(0));
-                    weather.setmWeatherByDays(DayWeather.findWithQuery(DayWeather.class, "Select * from DAY_WEATHER"));
-                });
     }
 }

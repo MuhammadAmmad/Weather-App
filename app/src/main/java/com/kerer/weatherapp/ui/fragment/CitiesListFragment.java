@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.arellomobile.mvp.MvpAppCompatFragment;
@@ -33,8 +34,9 @@ public class CitiesListFragment extends MvpAppCompatFragment implements CitiesLi
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_cities_list, container, false);
-        mPresenter.loadData();
 
+        Button aasdasdas = (Button) v.findViewById(R.id.aasdasdas);
+        aasdasdas.setOnClickListener(view -> mPresenter.loadData("Chernivtsi"));
         return v;
     }
 
@@ -49,8 +51,8 @@ public class CitiesListFragment extends MvpAppCompatFragment implements CitiesLi
     }
 
     @Override
-    public void showEmptyList() {
-        toast("Empty");
+    public void showNoDataSavedYet() {
+        toast("You have no saved info yet");
     }
 
     @Override
@@ -59,13 +61,13 @@ public class CitiesListFragment extends MvpAppCompatFragment implements CitiesLi
     }
 
     @Override
+    public void showNoInternet() {
+
+    }
+
+    @Override
     public void updateWeather(Weather weather) {
-
-
-       // weather.save();
-
-        Log.d("TAGGGGG", new Gson().toJson(weather));
-      //  Log.d("TAGGGGG", String.valueOf(Weather.find(Weather.class, "mCity", "Chernivtsi").get(0).getmCurrentlyWeather().getmTemperature()));
+        Log.d("TAGGS", new Gson().toJson(weather));
     }
 
 
@@ -78,4 +80,5 @@ public class CitiesListFragment extends MvpAppCompatFragment implements CitiesLi
     public void onDestroyView() {
         super.onDestroyView();
     }
+
 }
