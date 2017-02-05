@@ -24,14 +24,14 @@ import rx.schedulers.Schedulers;
  * Created by ivan on 04.02.17.
  */
 
-public class CitiesListModel {
+public class WeatherModel {
 
     private DarkSkyApi mDarkSkyApi;
     private Geocoder mGeocoder;
     private DatabaseUtil mDatabaseUtil;
 
     @Inject
-    public CitiesListModel(DarkSkyApi darkSkyApi, Geocoder geocoder, DatabaseUtil databaseUtil) {
+    public WeatherModel(DarkSkyApi darkSkyApi, Geocoder geocoder, DatabaseUtil databaseUtil) {
         this.mDarkSkyApi = darkSkyApi;
         this.mGeocoder = geocoder;
         this.mDatabaseUtil = databaseUtil;

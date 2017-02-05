@@ -6,7 +6,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.Toast;
 
 import com.arellomobile.mvp.MvpAppCompatFragment;
@@ -35,8 +34,6 @@ public class CitiesListFragment extends MvpAppCompatFragment implements CitiesLi
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_cities_list, container, false);
 
-        Button aasdasdas = (Button) v.findViewById(R.id.aasdasdas);
-        aasdasdas.setOnClickListener(view -> mPresenter.loadData("Chernivtsi"));
         return v;
     }
 
@@ -79,6 +76,9 @@ public class CitiesListFragment extends MvpAppCompatFragment implements CitiesLi
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        mPresenter.onDestroy();
     }
+
+
 
 }

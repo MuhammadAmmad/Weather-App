@@ -1,11 +1,18 @@
 package com.kerer.weatherapp.mvp.presenter;
 
+import android.content.Context;
+
 import com.arellomobile.mvp.InjectViewState;
+import com.f2prateek.rx.preferences.Preference;
 import com.kerer.weatherapp.App;
-import com.kerer.weatherapp.mvp.model.CitiesListModel;
+import com.kerer.weatherapp.WeatherService;
+import com.kerer.weatherapp.mvp.model.WeatherModel;
 import com.kerer.weatherapp.mvp.view.CitiesListView;
 
 import javax.inject.Inject;
+
+import rx.Subscription;
+import rx.schedulers.Schedulers;
 
 /**
  * Created by ivan on 04.02.17.
@@ -16,11 +23,16 @@ public class CitiesListPresenter extends BasePresenter<CitiesListView> {
     private static final String TAG = "CitiesListPresenter";
 
     @Inject
-    CitiesListModel mModel;
+    WeatherModel mModel;
+    @Inject
+    Preference<Boolean> mPreference;
+    @Inject
+    Context mContext;
 
     public CitiesListPresenter() {
         App.getAppComponent().injectCitiesListPresenter(this);
         updateData();
+        startService();
     }
 
     /**
@@ -28,29 +40,47 @@ public class CitiesListPresenter extends BasePresenter<CitiesListView> {
      */
     public void loadData(String cityName) {
 
-        mModel.loadCity(cityName)
+        Subscription subscription = mModel.loadCity(cityName)
                 .subscribe(weather -> {
                             getViewState().hideProgress();
                             getViewState().updateWeather(weather);
                         }
-                        , throwable -> {getViewState().showError(); throwable.printStackTrace();});
+                        , throwable -> {
+                            getViewState().showError();
+                            throwable.printStackTrace();
+                        });
+        unsubscribeOnDestroy(subscription);
     }
 
     /**
      * updating data by current city
      */
     private void updateData() {
-        if (!mModel.isSomeCitySaved()){
+        if (!mModel.isSomeCitySaved()) {
             getViewState().showNoDataSavedYet();
             return;
         }
 
-        mModel.updateWeather()
+        Subscription subscription = mModel.updateWeather()
                 .subscribe(weather -> {
                             getViewState().hideProgress();
                             getViewState().updateWeather(weather);
                         }
                         , throwable -> getViewState().showError());
+
+        unsubscribeOnDestroy(subscription);
     }
 
+    /**
+     * starting service for updating weather
+     */
+    private void startService() {
+
+        Subscription subscription = mPreference
+                .asObservable()
+                .observeOn(Schedulers.io())
+                .subscribe(aBoolean -> WeatherService.setServiceAlarm(mContext, aBoolean));
+
+        unsubscribeOnDestroy(subscription);
+    }
 }
