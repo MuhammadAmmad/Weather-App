@@ -4,12 +4,13 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.util.Log;
 
-import com.kerer.weatherapp.DatabaseUtil;
 import com.kerer.weatherapp.api.DarkSkyApi;
 import com.kerer.weatherapp.api.dto.WeatherResponseDTO;
 import com.kerer.weatherapp.entity.CurrentlyWeather;
 import com.kerer.weatherapp.entity.DayWeather;
 import com.kerer.weatherapp.entity.Weather;
+import com.kerer.weatherapp.util.DatabaseUtil;
+import com.kerer.weatherapp.util.NetworkUtil;
 
 import java.io.IOException;
 import java.util.List;
@@ -29,12 +30,14 @@ public class WeatherModel {
     private DarkSkyApi mDarkSkyApi;
     private Geocoder mGeocoder;
     private DatabaseUtil mDatabaseUtil;
+    private NetworkUtil mNetworkUtil;
 
     @Inject
-    public WeatherModel(DarkSkyApi darkSkyApi, Geocoder geocoder, DatabaseUtil databaseUtil) {
+    public WeatherModel(DarkSkyApi darkSkyApi, Geocoder geocoder, DatabaseUtil databaseUtil, NetworkUtil networkUtil) {
         this.mDarkSkyApi = darkSkyApi;
         this.mGeocoder = geocoder;
         this.mDatabaseUtil = databaseUtil;
+        this.mNetworkUtil = networkUtil;
     }
 
     /**
@@ -43,18 +46,24 @@ public class WeatherModel {
      *
      * @param city city for loading weather;
      * @return Observable with Weather object for working with it in presenter
-     * @throws IOException
      */
     public Observable<Weather> loadCity(String city) {
-        Log.d("CitiesListPresenter model", "loadCity");
 
+        if (!mNetworkUtil.isNetworkAvailableAndConnected()){
+            return mDatabaseUtil.getSavedInfo()
+                    .doOnError(throwable -> {
+                        Log.d("AAAAAAAAA", throwable.getMessage());
+                    })
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread());
+        }
         return mDarkSkyApi.getCityInfo(getFromAddress(city))
                 .map(this::getWeatherFromResponse)
                 .doOnNext(weather -> {
                     mDatabaseUtil.saveCity(city);
                     mDatabaseUtil.cachToDb(weather);
                 })
-                .doOnError(throwable -> Log.d("TAG_ERROR", throwable.getMessage()))
+                .doOnError(Throwable::printStackTrace)
                 .onErrorResumeNext(throwable -> mDatabaseUtil.getSavedInfo())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
@@ -73,12 +82,27 @@ public class WeatherModel {
     }
 
     /**
+     * getting city name from db
+     * @return city name
+     */
+    public String getCurrentCityName(){
+        return mDatabaseUtil.getSavedCity();
+    }
+
+    /**
      * @param dto http request response. Need to be converted at correct model
      * @return
      */
     private Weather getWeatherFromResponse(WeatherResponseDTO dto) {
-        CurrentlyWeather currentlyWeather = new CurrentlyWeather(dto.getCurrentlyDTO().getTemperature(),
-                dto.getCurrentlyDTO().getSummary(), dto.getCurrentlyDTO().getPrecipType());
+       /* CurrentlyWeather currentlyWeather = new CurrentlyWeather(dto.getCurrentlyDTO().getTemperature(),
+                dto.getCurrentlyDTO().getSummary(), dto.getCurrentlyDTO().getPrecipType());*/
+
+        CurrentlyWeather currentlyWeather = CurrentlyWeather.newBuilder()
+                .setTemperature(dto.getCurrentlyDTO().getTemperature())
+                .setDescription(dto.getCurrentlyDTO().getPrecipType())
+                .setSkyState(dto.getCurrentlyDTO().getSummary())
+                .build();
+
 
         List<DayWeather> daysWeather = Observable.from(dto.getDailyDTO().getData())
                 .map(datumDTO -> new DayWeather(datumDTO.getTemperatureMin(), datumDTO.getTemperatureMax(), datumDTO.getTime()))
@@ -97,12 +121,8 @@ public class WeatherModel {
      * @return coordinates like 23.2323,22.323233
      */
     private String getFromAddress(String address) {
-        Log.d("TAGGS", address);
-        Log.d("TAGGS", String.valueOf(mGeocoder.isPresent()));
-
         try {
             List<Address> addresses = mGeocoder.getFromLocationName(address, 1);
-            Log.d("TAGGS", addresses.get(0).getAddressLine(0));
             if (!addresses.isEmpty()) {
                 return addresses.get(0).getLatitude() + "," + addresses.get(0).getLongitude();
             }

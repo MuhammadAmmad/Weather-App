@@ -24,10 +24,9 @@ import javax.inject.Inject;
  * @author Ivan Kerer
  */
 
-
 public class WeatherService extends IntentService implements WeatherServiceView {
     private static final String TAG = "WeatherService";
-    private static final int POLL_INTERVAL = 1000 * 10; // 60 секунд
+    private static final int POLL_INTERVAL = 1000 * 60 * 60; // 60 секунд
 
     @Inject
     public WeatherServicePresenter mPresenter;

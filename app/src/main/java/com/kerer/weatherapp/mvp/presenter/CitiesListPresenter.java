@@ -1,13 +1,14 @@
 package com.kerer.weatherapp.mvp.presenter;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.arellomobile.mvp.InjectViewState;
 import com.f2prateek.rx.preferences.Preference;
 import com.kerer.weatherapp.App;
-import com.kerer.weatherapp.WeatherService;
 import com.kerer.weatherapp.mvp.model.WeatherModel;
 import com.kerer.weatherapp.mvp.view.CitiesListView;
+import com.kerer.weatherapp.service.WeatherService;
 
 import javax.inject.Inject;
 
@@ -31,21 +32,23 @@ public class CitiesListPresenter extends BasePresenter<CitiesListView> {
 
     public CitiesListPresenter() {
         App.getAppComponent().injectCitiesListPresenter(this);
-        updateData();
+        //updateData();
         startService();
     }
 
     /**
-     * Loading data from model can bee from Internet or from DB (if internet is not aviable)
+     * Loading data from model can bee from Internet or from DB(if internet is not aviable)
      */
     public void loadData(String cityName) {
 
         Subscription subscription = mModel.loadCity(cityName)
+                .doOnError(throwable -> Log.d("AAAAA D", throwable.getMessage()))
                 .subscribe(weather -> {
                             getViewState().hideProgress();
                             getViewState().updateWeather(weather);
                         }
                         , throwable -> {
+                            throwable.printStackTrace();
                             getViewState().showError();
                             throwable.printStackTrace();
                         });
@@ -68,9 +71,12 @@ public class CitiesListPresenter extends BasePresenter<CitiesListView> {
                         }
                         , throwable -> getViewState().showError());
 
-        unsubscribeOnDestroy(subscription);
+       // unsubscribeOnDestroy(subscription);
     }
 
+    public String getCuttrntCity(){
+        return mModel.getCurrentCityName();
+    }
     /**
      * starting service for updating weather
      */

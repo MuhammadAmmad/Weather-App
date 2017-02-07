@@ -8,7 +8,16 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="4"
-        android:background="@color/colorPrimaryDark"/>
+        >
+
+        <include layout="@layout/currently_weather_layout"/>
+
+        <ProgressBar
+            android:id="@+id/asfasfasfass"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"/>
+    </RelativeLayout>
 
 
 

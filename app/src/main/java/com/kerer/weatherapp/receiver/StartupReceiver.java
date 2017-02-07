@@ -4,7 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 
-import com.kerer.weatherapp.WeatherService;
+import com.kerer.weatherapp.service.WeatherService;
 
 /**
  * Date: 05.02.17

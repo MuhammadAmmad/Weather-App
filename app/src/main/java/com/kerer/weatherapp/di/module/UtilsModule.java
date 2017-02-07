@@ -6,7 +6,8 @@ import android.location.Geocoder;
 
 import com.f2prateek.rx.preferences.Preference;
 import com.f2prateek.rx.preferences.RxSharedPreferences;
-import com.kerer.weatherapp.DatabaseUtil;
+import com.kerer.weatherapp.util.DatabaseUtil;
+import com.kerer.weatherapp.util.NetworkUtil;
 
 import java.util.Locale;
 
@@ -42,5 +43,11 @@ public class UtilsModule {
         SharedPreferences sharedPreferences = getDefaultSharedPreferences(context);
         RxSharedPreferences rxSharedPreferences = RxSharedPreferences.create(sharedPreferences);
         return rxSharedPreferences.getBoolean("isFirst");
+    }
+
+    @Provides
+    @Singleton
+    public NetworkUtil providNetworkUtil(Context context){
+        return new NetworkUtil(context);
     }
 }

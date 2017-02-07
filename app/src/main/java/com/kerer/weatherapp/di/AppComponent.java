@@ -1,6 +1,6 @@
 package com.kerer.weatherapp.di;
 
-import com.kerer.weatherapp.WeatherService;
+import com.kerer.weatherapp.service.WeatherService;
 import com.kerer.weatherapp.api.DarkSkyApi;
 import com.kerer.weatherapp.di.module.ApiModule;
 import com.kerer.weatherapp.di.module.ContextModule;

@@ -7,6 +7,8 @@ import com.kerer.weatherapp.mvp.view.WeatherServiceView;
 
 import javax.inject.Inject;
 
+import rx.Subscription;
+
 /**
  * Date: 05.02.17
  * Time: 12:29
@@ -24,15 +26,15 @@ public class WeatherServicePresenter extends BasePresenter<WeatherServiceView> {
         App.getAppComponent().injectWeatherServicePresenter(this);
     }
 
-    public void loadData(){
-        if (mModel.isSomeCitySaved()){
-            mModel.updateWeather().subscribe(weather -> {
-               getViewState().showUpdates(String.valueOf(weather.getmCurrentlyWeather().getmTemperature()), weather.getmCurrentlyWeather().getmDescription()); // todo param - some data
+    public void loadData() {
+        if (mModel.isSomeCitySaved()) {
+            Subscription subscription = mModel.updateWeather().subscribe(weather -> {
+                getViewState().showUpdates(String.valueOf(weather.getmCurrentlyWeather().getmTemperature()), weather.getmCurrentlyWeather().getmDescription()); // todo param - some data
+
             });
+            unsubscribeOnDestroy(subscription);
         } else {
             getViewState().showUpdates("Add city please", "No cities added yet");
         }
     }
-
-
 }
