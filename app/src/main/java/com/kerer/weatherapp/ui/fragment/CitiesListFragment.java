@@ -89,10 +89,10 @@ public class CitiesListFragment extends BaseFragment implements CitiesListView {
     @Override
     public void updateWeather(Weather weather) {
         mCityNameTv.setText(mPresenter.getCuttrntCity() + ", " + weather.getmCurrentlyWeather().getmDescription());
-        mHumanidityTv.setText(String .valueOf(weather.getmCurrentlyWeather().getmHumidity()));
-        mPressureTv.setText(String.valueOf(weather.getmCurrentlyWeather().getmPressure()));
-        mWindSpeedTv.setText(String.valueOf(weather.getmCurrentlyWeather().getmWindSpeed()));
-        mCurrentTemperatureTv.setText(String.valueOf(weather.getmCurrentlyWeather().getmTemperature()));
+        mHumanidityTv.setText(String .valueOf(weather.getmCurrentlyWeather().getmHumidity()).split("\\.")[0]  + "%");
+        mPressureTv.setText(String.valueOf(weather.getmCurrentlyWeather().getmPressure()).split("\\.")[0]  + " мм рт. ст.");
+        mWindSpeedTv.setText(String.valueOf(weather.getmCurrentlyWeather().getmWindSpeed()).split("\\.")[0]  + " м/с");
+        mCurrentTemperatureTv.setText(String.valueOf(weather.getmCurrentlyWeather().getmTemperature()).split("\\.")[0] + (char) 0X00b0);
         mCurrentWeatherIcoTv.setText(weather.getmCurrentlyWeather().getmWeatherIco());
     }
 

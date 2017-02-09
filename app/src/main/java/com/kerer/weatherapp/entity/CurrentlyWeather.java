@@ -8,18 +8,18 @@ import com.orm.SugarRecord;
  */
 
 public class CurrentlyWeather extends SugarRecord {
-    private double mTemperature;
+    private int mTemperature;
     private String mDescription;
     private double mHumidity;
     private double mWindSpeed;
-    private double mPressure;
+    private int mPressure;
     private String mWeatherIco;
 
 
     public CurrentlyWeather() {
     }
 
-    private CurrentlyWeather(double mTemperature, String mDescription, double mHumidity) {
+    private CurrentlyWeather(int mTemperature, String mDescription, double mHumidity) {
         this.mTemperature = mTemperature;
         this.mDescription = mDescription;
         this.mHumidity = mHumidity;
@@ -37,7 +37,7 @@ public class CurrentlyWeather extends SugarRecord {
         return mTemperature;
     }
 
-    public void setmTemperature(double mTemperature) {
+    public void setmTemperature(int mTemperature) {
         this.mTemperature = mTemperature;
     }
 
@@ -61,7 +61,7 @@ public class CurrentlyWeather extends SugarRecord {
         return mWindSpeed;
     }
 
-    public void setmWindSpeed(double mWindSpeed) {
+    public void setmWindSpeed(int mWindSpeed) {
         this.mWindSpeed = mWindSpeed;
     }
 
@@ -69,7 +69,7 @@ public class CurrentlyWeather extends SugarRecord {
         return mPressure;
     }
 
-    public void setmPressure(double mPressure) {
+    public void setmPressure(int mPressure) {
         this.mPressure = mPressure;
     }
 
@@ -83,7 +83,7 @@ public class CurrentlyWeather extends SugarRecord {
         public Builder() {
         }
 
-        public Builder setTemperature(double temperature) {
+        public Builder setTemperature(int temperature) {
             CurrentlyWeather.this.mTemperature = temperature;
             return this;
         }
@@ -94,7 +94,7 @@ public class CurrentlyWeather extends SugarRecord {
         }
 
         public Builder setHumidity(double humidity) {
-            CurrentlyWeather.this.mHumidity = humidity;
+            CurrentlyWeather.this.mHumidity = humidity * 100;
             return this;
         }
 
@@ -103,7 +103,7 @@ public class CurrentlyWeather extends SugarRecord {
             return this;
         }
 
-        public Builder setPressure(double pressure) {
+        public Builder setPressure(int pressure) {
             CurrentlyWeather.this.mPressure = pressure;
             return this;
         }

@@ -100,11 +100,11 @@ public class WeatherModel {
 
         Log.d("AASFASF", new Gson().toJson(dto));
         CurrentlyWeather currentlyWeather = CurrentlyWeather.newBuilder()
-                .setTemperature(dto.getCurrentlyDTO().getTemperature())
+                .setTemperature(dto.getCurrentlyDTO().getTemperature().intValue())
                 .setDescription(dto.getCurrentlyDTO().getSummary())
                 .setHumidity(dto.getCurrentlyDTO().getHumidity())
                 .setWindSpreed(dto.getCurrentlyDTO().getWindSpeed())
-                .setPressure(dto.getCurrentlyDTO().getPressure() * 0.75) //Hectopascals to mmHg
+                .setPressure((int) (dto.getCurrentlyDTO().getPressure() * 0.75)) //Hectopascals to mmHg
                 .setIco(mIconsUtil.getFromText(dto.getCurrentlyDTO().getIcon()))
                 .build();
 
