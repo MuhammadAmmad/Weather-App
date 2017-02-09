@@ -7,6 +7,7 @@ import android.location.Geocoder;
 import com.f2prateek.rx.preferences.Preference;
 import com.f2prateek.rx.preferences.RxSharedPreferences;
 import com.kerer.weatherapp.util.DatabaseUtil;
+import com.kerer.weatherapp.util.IconsUtil;
 import com.kerer.weatherapp.util.NetworkUtil;
 
 import java.util.Locale;
@@ -49,5 +50,11 @@ public class UtilsModule {
     @Singleton
     public NetworkUtil providNetworkUtil(Context context){
         return new NetworkUtil(context);
+    }
+
+    @Provides
+    @Singleton
+    public IconsUtil provideIconsUtil(){
+        return new IconsUtil();
     }
 }

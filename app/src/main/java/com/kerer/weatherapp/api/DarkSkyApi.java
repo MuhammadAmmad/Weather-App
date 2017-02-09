@@ -12,6 +12,6 @@ import rx.Observable;
 
 
 public interface DarkSkyApi {
-    @GET("6fe704e6b0c6a571be927f4b3b1adf1c/{coordinates}?exclude=minutely,hourly,alerts,flags")
+    @GET("6fe704e6b0c6a571be927f4b3b1adf1c/{coordinates}?exclude=minutely,hourly,alerts,flags&&lang=uk")
     Observable<WeatherResponseDTO> getCityInfo(@Path("coordinates") String coordinates);
 }

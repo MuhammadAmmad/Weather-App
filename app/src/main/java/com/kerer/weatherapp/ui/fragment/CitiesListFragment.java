@@ -35,6 +35,16 @@ public class CitiesListFragment extends BaseFragment implements CitiesListView {
     TextView mChangeCityTv;
     @BindView(R.id.fragment_main_toolbar)
     TextView mCityNameTv;
+    @BindView(R.id.fragment_main_wind_speed_tv)
+    TextView mWindSpeedTv;
+    @BindView(R.id.fragment_main_humidity_tv)
+    TextView mHumanidityTv;
+    @BindView(R.id.fragment_main_pressure_tv)
+    TextView mPressureTv;
+    @BindView(R.id.fragment_main_temperature_tv)
+    TextView mCurrentTemperatureTv;
+    @BindView(R.id.fragment_main_weather_ico_tv)
+    TextView mCurrentWeatherIcoTv;
 
     public static CitiesListFragment newInstance(){
         return new CitiesListFragment();
@@ -78,9 +88,12 @@ public class CitiesListFragment extends BaseFragment implements CitiesListView {
 
     @Override
     public void updateWeather(Weather weather) {
-        //todo пережавати сюда і місто як аргумент
         mCityNameTv.setText(mPresenter.getCuttrntCity() + ", " + weather.getmCurrentlyWeather().getmDescription());
-
+        mHumanidityTv.setText(String .valueOf(weather.getmCurrentlyWeather().getmHumidity()));
+        mPressureTv.setText(String.valueOf(weather.getmCurrentlyWeather().getmPressure()));
+        mWindSpeedTv.setText(String.valueOf(weather.getmCurrentlyWeather().getmWindSpeed()));
+        mCurrentTemperatureTv.setText(String.valueOf(weather.getmCurrentlyWeather().getmTemperature()));
+        mCurrentWeatherIcoTv.setText(weather.getmCurrentlyWeather().getmWeatherIco());
     }
 
     private void toast(String text){

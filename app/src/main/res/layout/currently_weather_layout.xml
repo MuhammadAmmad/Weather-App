@@ -21,41 +21,61 @@
             android:id="@+id/fragment_main_change_city"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/change_city"/>
+            android:text="@string/change_city" />
 
-        <ImageView
-            android:id="@+id/fragment_main_current_weather_img"
-            android:layout_width="200dp"
-            android:layout_height="200dp"
-            android:src="@drawable/temp_eheat_ico"
-            android:layout_gravity="center"/>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center">
+
+            <TextView
+                android:id="@+id/fragment_main_temperature_tv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:textAlignment="center"
+                />
+
+            <com.kerer.weatherapp.widget.WeatherTextView
+                android:id="@+id/fragment_main_weather_ico_tv"
+                android:layout_centerInParent="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="200dp"
+                android:textColor="@color/colorPrimary"
+                android:gravity="center" />
+        </RelativeLayout>
+
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
+
             <TextView
                 android:id="@+id/fragment_main_wind_speed_tv"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="20mph"
-                android:gravity="center"/>
+                android:gravity="center"
+                android:text="20mph" />
+
             <TextView
                 android:id="@+id/fragment_main_humidity_tv"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="20mph"
-                android:gravity="center"/>
+                android:gravity="center"
+                android:text="20mph" />
+
             <TextView
 
                 android:id="@+id/fragment_main_pressure_tv"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="20mph"
-                android:gravity="center"/>
+                android:gravity="center"
+                android:text="20mph" />
         </LinearLayout>
 
     </LinearLayout>

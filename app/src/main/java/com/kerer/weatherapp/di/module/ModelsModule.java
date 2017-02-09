@@ -5,6 +5,7 @@ import android.location.Geocoder;
 import com.kerer.weatherapp.util.DatabaseUtil;
 import com.kerer.weatherapp.api.DarkSkyApi;
 import com.kerer.weatherapp.mvp.model.WeatherModel;
+import com.kerer.weatherapp.util.IconsUtil;
 import com.kerer.weatherapp.util.NetworkUtil;
 
 import javax.inject.Singleton;
@@ -19,7 +20,7 @@ import dagger.Provides;
 public class ModelsModule {
     @Provides
     @Singleton
-    WeatherModel provideCitiesListModel(DarkSkyApi darkSkyApi, Geocoder geocoder, DatabaseUtil databaseUtil, NetworkUtil networkUtil){
-        return new WeatherModel(darkSkyApi, geocoder, databaseUtil, networkUtil);
+    WeatherModel provideCitiesListModel(DarkSkyApi darkSkyApi, Geocoder geocoder, DatabaseUtil databaseUtil, NetworkUtil networkUtil, IconsUtil iconsUtil){
+        return new WeatherModel(darkSkyApi, geocoder, databaseUtil, networkUtil, iconsUtil);
     }
 }

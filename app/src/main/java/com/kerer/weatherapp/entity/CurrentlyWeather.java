@@ -10,32 +10,73 @@ import com.orm.SugarRecord;
 public class CurrentlyWeather extends SugarRecord {
     private double mTemperature;
     private String mDescription;
-    private String mSkyState;
+    private double mHumidity;
+    private double mWindSpeed;
+    private double mPressure;
+    private String mWeatherIco;
+
 
     public CurrentlyWeather() {
     }
 
-    public CurrentlyWeather(double mTemperature, String mDescription, String mSkyState) {
+    private CurrentlyWeather(double mTemperature, String mDescription, double mHumidity) {
         this.mTemperature = mTemperature;
         this.mDescription = mDescription;
-        this.mSkyState = mSkyState;
+        this.mHumidity = mHumidity;
+    }
+
+    public String getmWeatherIco() {
+        return mWeatherIco;
+    }
+
+    public void setmWeatherIco(String mWeatherIco) {
+        this.mWeatherIco = mWeatherIco;
     }
 
     public double getmTemperature() {
         return mTemperature;
     }
 
+    public void setmTemperature(double mTemperature) {
+        this.mTemperature = mTemperature;
+    }
+
     public String getmDescription() {
         return mDescription;
     }
 
-    public String getmSkyState() {
-        return mSkyState;
+    public void setmDescription(String mDescription) {
+        this.mDescription = mDescription;
     }
 
-    public static Builder newBuilder(){
+    public double getmHumidity() {
+        return mHumidity;
+    }
+
+    public void setmHumidity(double mHumidity) {
+        this.mHumidity = mHumidity;
+    }
+
+    public double getmWindSpeed() {
+        return mWindSpeed;
+    }
+
+    public void setmWindSpeed(double mWindSpeed) {
+        this.mWindSpeed = mWindSpeed;
+    }
+
+    public double getmPressure() {
+        return mPressure;
+    }
+
+    public void setmPressure(double mPressure) {
+        this.mPressure = mPressure;
+    }
+
+    public static Builder newBuilder() {
         return new CurrentlyWeather().new Builder();
     }
+
 
     public class Builder {
 
@@ -52,8 +93,23 @@ public class CurrentlyWeather extends SugarRecord {
             return this;
         }
 
-        public Builder setSkyState(String skyState) {
-            CurrentlyWeather.this.mSkyState = skyState;
+        public Builder setHumidity(double humidity) {
+            CurrentlyWeather.this.mHumidity = humidity;
+            return this;
+        }
+
+        public Builder setWindSpreed(double windSpeed) {
+            CurrentlyWeather.this.mWindSpeed = windSpeed;
+            return this;
+        }
+
+        public Builder setPressure(double pressure) {
+            CurrentlyWeather.this.mPressure = pressure;
+            return this;
+        }
+        public Builder setIco(String ico){
+            CurrentlyWeather.this.mWeatherIco = ico;
+
             return this;
         }
 
