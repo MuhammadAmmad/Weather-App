@@ -17,7 +17,8 @@
         <meta-data android:name="QUERY_LOG" android:value="true" />
         <meta-data android:name="DOMAIN_PACKAGE_NAME" android:value="com.kerer.weatherapp" />
 
-        <activity android:name=".ui.CitiesListActivity">
+        <activity android:name=".ui.CitiesListActivity"
+            android:windowSoftInputMode="stateVisible|adjustPan">
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

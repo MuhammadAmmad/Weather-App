@@ -40,7 +40,7 @@ public class CitiesListPresenter extends BasePresenter<CitiesListView> {
      * Loading data from model can bee from Internet or from DB(if internet is not aviable)
      */
     public void loadData(String cityName) {
-
+        getViewState().showProgress();
         Subscription subscription = mModel.loadCity(cityName)
                 .doOnError(throwable -> Log.d("AAAAA D", throwable.getMessage()))
                 .subscribe(weather -> {
@@ -58,8 +58,10 @@ public class CitiesListPresenter extends BasePresenter<CitiesListView> {
     /**
      * updating data by current city
      */
-    private void updateData() {
+    public void updateData() {
         if (!mModel.isSomeCitySaved()) {
+            getViewState().showNoDataSavedYet();
+            getViewState().hideProgress();
             getViewState().showNoDataSavedYet();
             return;
         }
@@ -74,7 +76,7 @@ public class CitiesListPresenter extends BasePresenter<CitiesListView> {
        // unsubscribeOnDestroy(subscription);
     }
 
-    public String getCuttrntCity(){
+    public String getCurrentCity(){
         return mModel.getCurrentCityName();
     }
     /**

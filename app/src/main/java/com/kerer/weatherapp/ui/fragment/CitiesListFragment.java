@@ -7,6 +7,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -40,7 +41,7 @@ public class CitiesListFragment extends BaseFragment implements CitiesListView {
     private DailyWeatherAdapter mAdapter;
 
     @BindView(R.id.fragment_main_change_city)
-    TextView mChangeCityTv;
+    EditText mChangeCityEd;
     @BindView(R.id.fragment_main_toolbar)
     TextView mCityNameTv;
     @BindView(R.id.fragment_main_wind_speed_tv)
@@ -53,10 +54,12 @@ public class CitiesListFragment extends BaseFragment implements CitiesListView {
     TextView mCurrentTemperatureTv;
     @BindView(R.id.fragment_main_weather_ico_tv)
     TextView mCurrentWeatherIcoTv;
+    @BindView(R.id.fragment_main_progress)
+    ProgressBar mProgress;
     @BindView(R.id.fragment_main_recyclerview)
     RecyclerView mRecyclerView;
 
-    public static CitiesListFragment newInstance(){
+    public static CitiesListFragment newInstance() {
         return new CitiesListFragment();
     }
 
@@ -64,27 +67,32 @@ public class CitiesListFragment extends BaseFragment implements CitiesListView {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_main, container, false);
-        showProgress();
-        mPresenter.loadData("Chernivtsi");
         ButterKnife.bind(this, v);
+        showProgress();
+        mPresenter.updateData();
         init();
         return v;
     }
 
-    private void init(){
+    private void init() {
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
         mAdapter = new DailyWeatherAdapter(new ArrayList<>());
         mRecyclerView.setAdapter(mAdapter);
+
+        mChangeCityEd.setOnKeyListener((v, code, event) -> {
+            mPresenter.loadData(mChangeCityEd.getText().toString());
+            return true;
+        });
     }
+
     @Override
     public void showProgress() {
-
+        mProgress.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void hideProgress() {
-        ProgressBar r = (ProgressBar) getView().findViewById(R.id.asfasfasfass);
-        r.setVisibility(GONE);
+        mProgress.setVisibility(GONE);
     }
 
     @Override
@@ -105,10 +113,10 @@ public class CitiesListFragment extends BaseFragment implements CitiesListView {
     @Override
     public void updateWeather(Weather weather) {
         //setting current weather
-        mCityNameTv.setText(mPresenter.getCuttrntCity() + ", " + weather.getmCurrentlyWeather().getmDescription());
-        mHumanidityTv.setText(String .valueOf(weather.getmCurrentlyWeather().getmHumidity()).split("\\.")[0]  + "%");
-        mPressureTv.setText(String.valueOf(weather.getmCurrentlyWeather().getmPressure()).split("\\.")[0]  + " мм рт. ст.");
-        mWindSpeedTv.setText(String.valueOf(weather.getmCurrentlyWeather().getmWindSpeed()).split("\\.")[0]  + " м/с");
+        mCityNameTv.setText(mPresenter.getCurrentCity() + ", " + weather.getmCurrentlyWeather().getmDescription());
+        mHumanidityTv.setText(String.valueOf(weather.getmCurrentlyWeather().getmHumidity()).split("\\.")[0] + "%");
+        mPressureTv.setText(String.valueOf(weather.getmCurrentlyWeather().getmPressure()).split("\\.")[0] + " мм рт. ст.");
+        mWindSpeedTv.setText(String.valueOf(weather.getmCurrentlyWeather().getmWindSpeed()).split("\\.")[0] + " м/с");
         mCurrentTemperatureTv.setText(String.valueOf(weather.getmCurrentlyWeather().getmTemperature()).split("\\.")[0] + (char) 0X00b0);
         mCurrentWeatherIcoTv.setText(weather.getmCurrentlyWeather().getmWeatherIco());
 
@@ -116,12 +124,12 @@ public class CitiesListFragment extends BaseFragment implements CitiesListView {
         mAdapter.updateItems(weather.getmWeatherByDays());
     }
 
-    private void toast(String text){
+    private void toast(String text) {
         Toast.makeText(getActivity(), text, Toast.LENGTH_SHORT)
                 .show();
     }
 
-    public class DailyWeatherHolder extends RecyclerView.ViewHolder{
+    public class DailyWeatherHolder extends RecyclerView.ViewHolder {
         private DayWeather mDayWeather;
 
         @BindView(R.id.daily_item_temperature_tv)
@@ -136,7 +144,7 @@ public class CitiesListFragment extends BaseFragment implements CitiesListView {
             ButterKnife.bind(this, itemView);
         }
 
-        public void bind(DayWeather dayWeather){
+        public void bind(DayWeather dayWeather) {
             mDayWeather = dayWeather;
 
             mTemperatureTv.setText(String.valueOf(dayWeather.getmMaxTemperature()).split("\\.")[0] + " / " + String.valueOf(dayWeather.getmMinTemperature()).split("\\.")[0]);
@@ -170,7 +178,7 @@ public class CitiesListFragment extends BaseFragment implements CitiesListView {
             return mDayWheathers.size();
         }
 
-        public void updateItems(List<DayWeather> dayWeathers){
+        public void updateItems(List<DayWeather> dayWeathers) {
             mDayWheathers = dayWeathers;
             notifyDataSetChanged();
         }
@@ -181,7 +189,6 @@ public class CitiesListFragment extends BaseFragment implements CitiesListView {
         super.onDestroyView();
         mPresenter.onDestroy();
     }
-
 
 
 }
