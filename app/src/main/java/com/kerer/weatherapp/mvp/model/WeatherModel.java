@@ -55,7 +55,6 @@ public class WeatherModel {
 
         if (!mNetworkUtil.isNetworkAvailableAndConnected()){
             return mDatabaseUtil.getSavedInfo()
-
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread());
         }
@@ -109,7 +108,12 @@ public class WeatherModel {
                 .build();
 
         List<DayWeather> daysWeather = Observable.from(dto.getDailyDTO().getData())
-                .map(datumDTO -> new DayWeather(datumDTO.getTemperatureMin(), datumDTO.getTemperatureMax(), datumDTO.getTime()))
+                .map(datumDTO -> DayWeather.newBuilder()
+                            .maxTemperature(datumDTO.getTemperatureMax())
+                            .minTemperature(datumDTO.getTemperatureMin())
+                            .description(datumDTO.getSummary())
+                            .ico(mIconsUtil.getFromText(datumDTO.getIcon()))
+                            .build())
                 .toList()
                 .toBlocking()
                 .first();
