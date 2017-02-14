@@ -140,7 +140,7 @@ public class CitiesListFragment extends BaseFragment implements CitiesListView {
             mDayWeather = dayWeather;
 
             mTemperatureTv.setText(String.valueOf(dayWeather.getmMaxTemperature()).split("\\.")[0] + " / " + String.valueOf(dayWeather.getmMinTemperature()).split("\\.")[0]);
-            //mDayOfWeekTv.setText(dayWeather.getmDescription());
+            mDayOfWeekTv.setText(dayWeather.getmDayOfWeek());
             mIco.setText(dayWeather.getmIco());
         }
 

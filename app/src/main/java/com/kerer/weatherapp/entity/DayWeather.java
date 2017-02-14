@@ -10,8 +10,9 @@ import com.orm.SugarRecord;
 public class DayWeather extends SugarRecord {
     private Double mMinTemperature;
     private Double mMaxTemperature;
-    private String mDescription;
+    private String mDayOfWeek;
     private String mIco;
+    private Integer mTime;
 
     public DayWeather() {
 
@@ -33,12 +34,12 @@ public class DayWeather extends SugarRecord {
         this.mMaxTemperature = mMaxTemperature;
     }
 
-    public String getmDescription() {
-        return mDescription;
+    public String getmDayOfWeek() {
+        return mDayOfWeek;
     }
 
-    public void setmDescription(String mDescription) {
-        this.mDescription = mDescription;
+    public void setmDayOfWeek(String mDayOfWeek) {
+        this.mDayOfWeek = mDayOfWeek;
     }
 
     public String getmIco() {
@@ -47,6 +48,14 @@ public class DayWeather extends SugarRecord {
 
     public void setmIco(String mIco) {
         this.mIco = mIco;
+    }
+
+    public Integer getmTime() {
+        return mTime;
+    }
+
+    public void setmTime(Integer mTime) {
+        this.mTime = mTime;
     }
 
     public static DayWeather.Builder newBuilder() {
@@ -68,8 +77,8 @@ public class DayWeather extends SugarRecord {
             return this;
         }
 
-        public Builder description(String description){
-            DayWeather.this.mDescription = description;
+        public Builder dayOfWeek(String description){
+            DayWeather.this.mDayOfWeek = description;
             return this;
         }
 
@@ -78,6 +87,10 @@ public class DayWeather extends SugarRecord {
             return this;
         }
 
+        public Builder time(Integer time){
+            mTime = time;
+            return this;
+        }
         public DayWeather build(){
             return DayWeather.this;
         }

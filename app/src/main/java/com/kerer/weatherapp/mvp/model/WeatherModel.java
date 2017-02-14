@@ -2,9 +2,7 @@ package com.kerer.weatherapp.mvp.model;
 
 import android.location.Address;
 import android.location.Geocoder;
-import android.util.Log;
 
-import com.google.gson.Gson;
 import com.kerer.weatherapp.api.DarkSkyApi;
 import com.kerer.weatherapp.api.dto.WeatherResponseDTO;
 import com.kerer.weatherapp.entity.CurrentlyWeather;
@@ -15,6 +13,8 @@ import com.kerer.weatherapp.util.IconsUtil;
 import com.kerer.weatherapp.util.NetworkUtil;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -53,7 +53,7 @@ public class WeatherModel {
      */
     public Observable<Weather> loadCity(String city) {
 
-        if (!mNetworkUtil.isNetworkAvailableAndConnected()){
+        if (!mNetworkUtil.isNetworkAvailableAndConnected()) {
             return mDatabaseUtil.getSavedInfo()
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread());
@@ -71,21 +71,23 @@ public class WeatherModel {
 
     /**
      * call when user need update weather for saved city
+     *
      * @return Observable with Weather object for working with it in presenter
      */
-    public Observable<Weather> updateWeather(){
+    public Observable<Weather> updateWeather() {
         return loadCity(mDatabaseUtil.getSavedCity());
     }
 
-    public boolean isSomeCitySaved(){
+    public boolean isSomeCitySaved() {
         return mDatabaseUtil.getSavedCity() != null;
     }
 
     /**
      * getting city name from db
+     *
      * @return city name
      */
-    public String getCurrentCityName(){
+    public String getCurrentCityName() {
         return mDatabaseUtil.getSavedCity();
     }
 
@@ -97,7 +99,6 @@ public class WeatherModel {
        /* CurrentlyWeather currentlyWeather = new CurrentlyWeather(dto.getCurrentlyDTO().getTemperature(),
                 dto.getCurrentlyDTO().getSummary(), dto.getCurrentlyDTO().getPrecipType());*/
 
-        Log.d("AASFASF", new Gson().toJson(dto));
         CurrentlyWeather currentlyWeather = CurrentlyWeather.newBuilder()
                 .setTemperature(dto.getCurrentlyDTO().getTemperature().intValue())
                 .setDescription(dto.getCurrentlyDTO().getSummary())
@@ -109,11 +110,11 @@ public class WeatherModel {
 
         List<DayWeather> daysWeather = Observable.from(dto.getDailyDTO().getData())
                 .map(datumDTO -> DayWeather.newBuilder()
-                            .maxTemperature(datumDTO.getTemperatureMax())
-                            .minTemperature(datumDTO.getTemperatureMin())
-                            .description(datumDTO.getSummary())
-                            .ico(mIconsUtil.getFromText(datumDTO.getIcon()))
-                            .build())
+                        .maxTemperature(datumDTO.getTemperatureMax())
+                        .minTemperature(datumDTO.getTemperatureMin())
+                        .dayOfWeek(timestampToDayOfWeek(datumDTO.getTime()))
+                        .ico(mIconsUtil.getFromText(datumDTO.getIcon()))
+                        .build())
                 .toList()
                 .toBlocking()
                 .first();
@@ -121,6 +122,19 @@ public class WeatherModel {
         return new Weather(currentlyWeather, daysWeather);
     }
 
+    /**
+     * make day of week from UNIX time stamp
+     *
+     * @param time - UNIZ timestamp
+     * @return day of week
+     */
+    private String timestampToDayOfWeek(Integer time) {
+        Date date = new Date(time * 1000L);
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("EEE"); // the format of your date
+        String formattedDate = simpleDateFormat.format(date);
+
+        return formattedDate;
+    }
 
     /**
      * Method for casting address to coordinates
