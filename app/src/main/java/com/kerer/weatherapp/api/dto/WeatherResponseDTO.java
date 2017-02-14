@@ -73,4 +73,6 @@ public class WeatherResponseDTO {
         this.dailyDTO = dailyDTO;
     }
 
+
+
 }

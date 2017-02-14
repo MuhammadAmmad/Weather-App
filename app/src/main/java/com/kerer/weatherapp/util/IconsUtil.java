@@ -28,7 +28,7 @@ public class IconsUtil {
             case "cloudy":
                 return "P";
             case "partly-cloudy-day":
-                return "C";
+                return "O";
             case "partly-cloudy-night":
                 return "D";
             case "thunderstorm":

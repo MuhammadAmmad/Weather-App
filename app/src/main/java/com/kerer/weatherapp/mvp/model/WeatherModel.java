@@ -100,7 +100,7 @@ public class WeatherModel {
                 dto.getCurrentlyDTO().getSummary(), dto.getCurrentlyDTO().getPrecipType());*/
 
         CurrentlyWeather currentlyWeather = CurrentlyWeather.newBuilder()
-                .setTemperature(dto.getCurrentlyDTO().getTemperature().intValue())
+                .setTemperature(dto.getCurrentlyDTO().getTemperatureInCelcium().intValue())
                 .setDescription(dto.getCurrentlyDTO().getSummary())
                 .setHumidity(dto.getCurrentlyDTO().getHumidity())
                 .setWindSpreed(dto.getCurrentlyDTO().getWindSpeed())
@@ -110,8 +110,8 @@ public class WeatherModel {
 
         List<DayWeather> daysWeather = Observable.from(dto.getDailyDTO().getData())
                 .map(datumDTO -> DayWeather.newBuilder()
-                        .maxTemperature(datumDTO.getTemperatureMax())
-                        .minTemperature(datumDTO.getTemperatureMin())
+                        .maxTemperature(datumDTO.getMaxTemperatureInCelcium().intValue())
+                        .minTemperature(datumDTO.getMinTemperatureInCelcium().intValue())
                         .dayOfWeek(timestampToDayOfWeek(datumDTO.getTime()))
                         .ico(mIconsUtil.getFromText(datumDTO.getIcon()))
                         .build())

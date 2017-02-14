@@ -315,4 +315,11 @@ public class DatumDTO {
         this.precipAccumulation = precipAccumulation;
     }
 
+    public Long getMinTemperatureInCelcium(){
+        return (long) ((temperatureMin - 32) / 1.8);
+    }
+
+    public Long getMaxTemperatureInCelcium(){
+        return (long) ((temperatureMax - 32) / 1.8);
+    }
 }

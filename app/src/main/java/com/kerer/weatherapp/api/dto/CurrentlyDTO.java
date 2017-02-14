@@ -183,4 +183,8 @@ public class CurrentlyDTO {
         this.ozone = ozone;
     }
 
+    public Long getTemperatureInCelcium(){
+        return (long) ((temperature - 32) / 1.8);
+    }
+
 }

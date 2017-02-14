@@ -58,6 +58,7 @@ public class DayWeather extends SugarRecord {
         this.mTime = mTime;
     }
 
+
     public static DayWeather.Builder newBuilder() {
         return new DayWeather().new Builder();
     }
