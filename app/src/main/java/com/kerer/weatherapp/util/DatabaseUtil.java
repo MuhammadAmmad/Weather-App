@@ -1,5 +1,7 @@
 package com.kerer.weatherapp.util;
 
+import android.database.sqlite.SQLiteException;
+
 import com.kerer.weatherapp.entity.City;
 import com.kerer.weatherapp.entity.CurrentlyWeather;
 import com.kerer.weatherapp.entity.DayWeather;
@@ -48,12 +50,16 @@ public class DatabaseUtil {
      * @return saved city name or null ()
      */
     public String getSavedCity(){
-        List<City> savedCity = City
-                .findWithQuery(City.class, "Select * from CITY");
-        if (savedCity.isEmpty()){
+        try{
+            List<City> savedCity = City
+                    .findWithQuery(City.class, "Select * from CITY");
+            if (savedCity.isEmpty()){
+                return null;
+            }
+            return savedCity.get(0).getmCityName();
+        } catch (SQLiteException ignored){
             return null;
         }
-        return savedCity.get(0).getmCityName();
     }
 
   /*  public String getSavedCity(){
@@ -71,7 +77,7 @@ public class DatabaseUtil {
 
 
     /**
-     * getting saved into Db info, while no internet connection
+     * getting saved from Db info, while no internet connection
      * @return Observable with Weather
      */
     public Observable<Weather> getSavedInfo() {

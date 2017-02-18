@@ -2,11 +2,14 @@ package com.kerer.weatherapp.ui.fragment;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -79,10 +82,19 @@ public class CitiesListFragment extends BaseFragment implements CitiesListView {
         mAdapter = new DailyWeatherAdapter(new ArrayList<>());
         mRecyclerView.setAdapter(mAdapter);
 
-        mChangeCityEd.setOnKeyListener((v, code, event) -> {
-            mPresenter.loadData(mChangeCityEd.getText().toString());
-            return true;
+        mChangeCityEd.setOnEditorActionListener((v, code, event) -> {
+            if ((event != null && (event.getKeyCode() == KeyEvent.KEYCODE_ENTER)) || (code == EditorInfo.IME_ACTION_DONE)) {
+                mPresenter.loadData(mChangeCityEd.getText().toString());
+            }
+            return false;
         });
+
+        ViewCompat.animate(mCurrentWeatherIcoTv)
+                .scaleX(0f)
+                .scaleY(0f)
+                .scaleXBy(100f)
+                .scaleYBy(100f)
+                .setDuration(20000);
     }
 
     @Override
